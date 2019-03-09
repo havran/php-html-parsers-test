@@ -1,0 +1,10 @@
+{
+    "require": {
+        "ivopetkov/html5-dom-document-php": "2.*",
+        "paquettg/php-html-parser": "^2.0",
+        "masterminds/html5": "^2.5",
+        "symfony/dom-crawler": "^4.2",
+        "symfony/css-selector": "^4.2",
+        "sunra/php-simple-html-dom-parser": "^1.5"
+    }
+}
