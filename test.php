@@ -6,7 +6,7 @@ $html = <<<EOF
 <html prefix="og: http://ogp.me/ns#">
   <head>
     <meta charset="UTF-8">
-    <title>网友终于肉搜出「范冰冰」家族照片，没想到看见她奶奶才发现「范冰冰是全家最难看的」！</title>
+    <title>网友终于肉搜出「范冰冰」家族照片<br />，没想到看见她奶奶才发现「范冰冰是全家最难看的」！</title>
   </head>
   <body>
     <ol>
@@ -50,7 +50,10 @@ function php_html_parser($html) {
   $dom->setOptions([
     'removeDoubleSpace' => false,
     'cleanupInput' => false,
+    'removeScripts' => false,
+    'removeStyles' => false,
     'preserveLineBreaks' => true,
+    'removeDoubleSpace' => false,
   ]);
   $dom->load($html);
   return $dom->__toString();
@@ -83,17 +86,39 @@ function simplehtmldom($html) {
 }
 /** END simplehtmldom */
 
+/**
+ * https://github.com/symfony/dom-crawler
+ * DOCS: https://symfony.com/components/DomCrawler
+ */
+function symfony_dom_crawler($html) {
+  $dom = new  Symfony\Component\DomCrawler\Crawler($html);
+  return $dom->html();
+}
+/** END symfony_dom_crawler */
+
+/**
+ * https://github.com/wasinger/htmlpagedom
+ */
+function htmlpagedom($html) {
+  $dom = new \Wa72\HtmlPageDom\HtmlPageCrawler($html);
+  return $dom->saveHTML();
+}
+/** END htmlpagedom */
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 function test($func, $html) {
+  $transformed = call_user_func($func, $html);
   echo '--- ORIGINAL ---------------------------------------------------------------' . PHP_EOL;
   echo $html;
   echo PHP_EOL;
   echo '--- TRANSFORMED ------------------------------------------------------------' . PHP_EOL;
-  echo call_user_func($func, $html);
+  echo $transformed;
   echo PHP_EOL;
   echo '----------------------------------------------------------------------------' . PHP_EOL;
+  echo md5($html).PHP_EOL;
+  echo md5($transformed).PHP_EOL;
 }
 
 $test_functions = [
@@ -101,10 +126,15 @@ $test_functions = [
   'php_html_parser',
   'html5_php',
   'simplehtmldom',
+  'symfony_dom_crawler',
+  'htmlpagedom',
 ];
 
 foreach ($test_functions as $function) {
   echo '>>> ' . $function . '<<<' . PHP_EOL.PHP_EOL;
+  ///
+  // For test whole HTML page, second parameter is $html, for fragment of HTML $html_fragment.
+  ///
   test($function, $html);
   echo PHP_EOL.PHP_EOL;
 }

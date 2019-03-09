@@ -5,6 +5,7 @@
         "masterminds/html5": "^2.5",
         "symfony/dom-crawler": "^4.2",
         "symfony/css-selector": "^4.2",
-        "sunra/php-simple-html-dom-parser": "^1.5"
+        "sunra/php-simple-html-dom-parser": "^1.5",
+        "wa72/htmlpagedom": "^1.3"
     }
 }
